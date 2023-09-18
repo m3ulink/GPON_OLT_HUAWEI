@@ -1,24 +1,23 @@
-
-Puerto de manage ip 192.168.50.100 habilitado ssh y telnet.
-Ejemplos de configuración ONT todos los puertos en la misma VLAN
+Manage IP port 192.168.50.100 enabled ssh and telnet.
+ONT configuration examples all ports in the same VLAN
 Vlan 26 smart
 
 port vlan 26 0/2 0
 
-#Creamos interfaz si nos hace falta
+#We create interface if we need it
 Interface vlanif10
-Ip address 192.168.x.x 255.255.255.0
+IP address 192.168.x.x 255.255.255.0
 
-#configuramos el puerto de gestión
-Interface meth 0 
-Ip address 192.168.1.1. 255.255.255.0
+#configure the management port
+Interface meth 0
+IP address 192.168.1.1. 255.255.255.0
 
-#Habilitamos ssh /telnet
+#We enable ssh /telnet
 Sysman service ssh enable
 Sysman service telnet enable
 
-#crear un usuario para usar ssh/telnet
-Terminal user name “tecleamos y nos guia para crear un user ”
+#create a user to use ssh/telnet
+Terminal user name “we type and it guides us to create a user”
 
  
 Service-profile:
@@ -55,7 +54,7 @@ GEM ID: 50
 -----------------------------
 
 
-interface gpon F/S
+gpon F/S interface
 ont add p sn-auth 485754437FD4E55A omci ont-lineprofile-id 50 ont-srvprofile-id 50 desc "Customer_Name/ID"
 
 
@@ -63,21 +62,21 @@ Native VLAN (p=PON_port, Y=ONT ID):
 -----------------------------------
 
 
-interface gpon F/S
-ont port native-vlan p y eth 1 vlan 26
-ont port native-vlan p y eth 2 vlan 26
-ont port native-vlan p y eth 3 vlan 26
-ont port native-vlan p y eth 4 vlan 26
+gpon F/S interface
+ont port native-vlan p and eth 1 vlan 26
+ont port native-vlan p and eth 2 vlan 26
+ont port native-vlan p and eth 3 vlan 26
+ont port native-vlan p and eth 4 vlan 26
 
 
 
 Service port (x=service-port Value it is unique for each ONT/service vlan, F/S/P=Frame/Slot/PON_port):
-------------------------------------------------------------------------------------------------------
+-------------------------------------------------- -------------------------------------------------- --
 
-service-port x vlan 26 gpon F/S/P ont y gemport 50 multi-service user-vlan  26 tag-transform translate
+service-port x vlan 26 gpon F/S/P ont y gemport 50 multi-service user-vlan 26 tag-transform translate
 
 
-#Ejemplos de configuración ONT  todos los puertos en distinta VLAN
+#ONT configuration examples all ports in different VLAN
 vlan 20-23 smart
 
 port vlan 20-23 0/2 0
@@ -113,54 +112,54 @@ GEM ID: 50
 -----------------------------
 
 
-interface gpon F/S
+gpon F/S interface
 ont add p sn-auth 485754437FD4E55A omci ont-lineprofile-id 50 ont-srvprofile-id 50 desc "Customer_Name/ID"
 
 
 Native VLAN (p=PON_port, Y=ONT ID):
 -----------------------------------
 
-ont port native-vlan p y eth 1 vlan 20
-ont port native-vlan p y eth 2 vlan 21
-ont port native-vlan p y eth 3 vlan 22
-ont port native-vlan p y eth 4 vlan 23
+ont port native-vlan p and eth 1 vlan 20
+ont port native-vlan p and eth 2 vlan 21
+ont port native-vlan p and eth 3 vlan 22
+ont port native-vlan p and eth 4 vlan 23
 
 
 
 Service port (x=service-port Value it is unique for each ONT/service vlan, F/S/P=Frame/Slot/PON_port):
-------------------------------------------------------------------------------------------------------
+-------------------------------------------------- -------------------------------------------------- --
 
-service-port x vlan 20 gpon F/S/P ont y gemport 50 multi-service user-vlan  20 tag-transform translate
-service-port x vlan 21 gpon F/S/P ont y gemport 50 multi-service user-vlan  21 tag-transform translate
-service-port x vlan 22 gpon F/S/P ont y gemport 50 multi-service user-vlan  22 tag-transform translate
-service-port x vlan 23 gpon F/S/P ont y gemport 50 multi-service user-vlan  23 tag-transform translate
-
-
+service-port x vlan 20 gpon F/S/P ont y gemport 50 multi-service user-vlan 20 tag-transform translate
+service-port x vlan 21 gpon F/S/P ont y gemport 50 multi-service user-vlan 21 tag-transform translate
+service-port x vlan 22 gpon F/S/P ont y gemport 50 multi-service user-vlan 22 tag-transform translate
+service-port x vlan 23 gpon F/S/P ont y gemport 50 multi-service user-vlan 23 tag-transform translate
 
 
 
 
 
 
-#Ejemplo configurado en el cliente Marjal Tarragona Creamos Vlans en la olt
- vlan 13 to 13 smart
+
+
+#Example configured in the Marjal Tarragona client We create Vlans in the olt
+  vlan 13 to 13 smart
 vlan 19 to 19 smart
-#Creamos asignamos vlan al puerto por el que le pasamos las vlans
+#We create and assign vlan to the port through which we pass the vlans
 port vlan 13,19,80 0/3 0
-#Creamos un profile, solo es necesario 1, es independiente de la vlan
-ont-srvprofile  gpon profile-id 19 profile-name Internet_Vlan_19
-#Configuramos los puertos según el modelo de las ONTS
+#We create a profile, only 1 is necessary, it is independent of the vlan
+ont-srvprofile gpon profile-id 19 profile-name Internet_Vlan_19
+#We configure the ports according to the ONTS model
 ont-port pots adaptive 32 eth adaptive 13 catv adaptive 8
-#definimos las vlans que vamos a usar pasándolas por ejemplo a un puerto cada vlan
-  port vlan eth 1 translation 19 user-vlan 11
-  port vlan eth 3 translation 19 user-vlan 13
-  port vlan eth 3 translation 19 user-vlan 19
-  port vlan eth 4 translation 19 user-vlan 80
-#Terminamos de configurar el ont-lineprofile con el service profile que hemos creado anteriormente.
- ont-lineprofile gpon profile-id 19 profile-name "Internet_VLAN_19"
-  tcont 4 dba-profile-id 13
-#mapeamos los gem con el Tcont anterior  y las vlans
- gem add 19 eth tcont 4
+#we define the vlans that we are going to use, for example passing them to a port for each vlan
+   port vlan eth 1 translation 19 user-vlan 11
+   port vlan eth 3 translation 19 user-vlan 13
+   port vlan eth 3 translation 19 user-vlan 19
+   port vlan eth 4 translation 19 user-vlan 80
+#We finish configuring the ont-lineprofile with the service profile that we created previously.
+  ont-lineprofile gpon profile-id 19 profile-name "Internet_VLAN_19"
+   tcont 4 dba-profile-id 13
+#we map the gems with the previous Tcont and the vlans
+  gem add 19 eth tcont 4
 gem add 19 eth tcont 4
 gem mapping 19 0 vlan 11
 gem mapping 19 1 vlan 13
@@ -169,7 +168,7 @@ gem mapping 19 3 vlan 80
 commit
 quit
 
-#EJEMPLO DE CONFIGURACION DE UNA NUEVA ONT
+#EXAMPLE OF CONFIGURATION OF A NEW ONT
 interface gpon 0/0
 #
 ont add 5 sn-auth 485754430407C39E omci ont-lineprofile-id 19 ont-srvprofile-id 19 desc "10.30.19.225"
@@ -180,57 +179,4 @@ ont port native-vlan 5 3 eth 3 vlan 19
 ont port native-vlan 5 3 eth 4 vlan 80
 quit
 #
-service-port vlan 11 gpon 0/0/5 ont 3 gemport 19 multi-service user-vlan 11 tag-transform translate
-#
-service-port vlan 13 gpon 0/0/5 ont 3 gemport 19 multi-service user-vlan 13 tag-transform translate
-#
-service-port vlan 19 gpon 0/0/5 ont 3 gemport 19 multi-service user-vlan 19 tag-transform translate
-#
-service-port vlan 80 gpon 0/0/5 ont 3 gemport 19 multi-service user-vlan 80 tag-transform translate inbound traffic-table index 80 outbound traffic-table index 80
-#
-#Crear perfil Máximo tráfico
- traffic table ip index 80 name "10Mbps" cir 10240 cbs 657360 pir 10240 pbs 657360 color-mode color-blind priority 0 priority-policy
-  service-port X vlan 13 gpon 0/0/0 ont 0 gemport 13 multi-service user-vlan 13  tag-transform translate inbound traffic-table index 13 outbound traffic-table
-
-
-#COMANDOS ÚTILES
-https://support.huawei.com/onlinetoolweb/fttxSGTool_E/en/OneStep_v1/onestep/topics/cfg_cli_fttx_0204
-#Descubrimiento de nuevas onts
-huawei(config)#interface gpon 0/1
-huawei(config-if-gpon-0/1)#port 0 ont-auto-find enable
-huawei(config-if-gpon-0/1)#display ont autofind 0
- 
-
-
-#listar ont
-huawei(config-if-gpon-0/1)#display ont info 0 1
-display ont info _puerto_  _ont_id_
-display ont info _puerto_ all   “nos lista todas las de este puerto”
-
- 
-
-#Listar los service port, esto es lo que le envía las vlan a las onts.
-Display service-port all
- 
-
-#Ver la config que tiene una ont determinada.
- 
-
-
-#ver config
-Display current-configuration
-Filtrar la config 
-Display current-configuration | section vlan
- 
-http://gponsolution.com/category/gpon/troubleshooting-command
-
-
-
-#Guardar config
-Save data
-Save configuration
-
-
-
-
-
+service-port vlan 11 gpon 0/0/5 ont 3 gemport 19 multi-service user-vlan 1
